@@ -1,5 +1,7 @@
 # ColorLabel for [fyne](https://fyne.io/)
-Implements a label with colored text and background as fyne widget.
+Implements a label with colored text and background as fyne widget.  
+You can use color names defined by Fyne theme or direct NRGBA values.  
+The labels can alos be clicked if needed.  
 
 Author: Reiner Pröls  
 Licence: MIT  
@@ -11,13 +13,15 @@ go get github.com/bytemystery-com/colorlabel
 
 ## Import ColorLabel
 ```go
-import github.com/bytemystery-com/colorlabel`
+import github.com/bytemystery-com/colorlabel
 ```
 
 ## Usage of ColorLabel
 ```go
 colorlabel.NewColorLabel("Text in red", color.NRGBA{R: 255, G: 0, B: 0, A: 255}, "", 1.0)
+```
 or
+```go
 colorlabel.NewColorLabel("Colors as theme names", theme.ColorNameForeground, theme.ColorNameSelection, 1.0)
 ```
 
@@ -93,27 +97,19 @@ import "github.com/bytemystery-com/colorlabel"
 
 ## Index
 
-- [ColorLabel for fyne](#colorlabel-for-fyne)
-	- [Getting ColorLabel](#getting-colorlabel)
-	- [Import ColorLabel](#import-colorlabel)
-	- [Usage of ColorLabel](#usage-of-colorlabel)
-	- [Screenshots from the example](#screenshots-from-the-example)
-	- [Docu](#docu)
-- [colorlabel](#colorlabel)
-	- [Index](#index)
-	- [type ColorLabel](#type-colorlabel)
-		- [func NewColorLabel](#func-newcolorlabel)
-		- [func (\*ColorLabel) CreateRenderer](#func-colorlabel-createrenderer)
-		- [func (\*ColorLabel) GetLastKeyModifier](#func-colorlabel-getlastkeymodifier)
-		- [func (\*ColorLabel) MouseDown](#func-colorlabel-mousedown)
-		- [func (\*ColorLabel) MouseUp](#func-colorlabel-mouseup)
-		- [func (\*ColorLabel) SetBackgroundColor](#func-colorlabel-setbackgroundcolor)
-		- [func (\*ColorLabel) SetText](#func-colorlabel-settext)
-		- [func (\*ColorLabel) SetTextColor](#func-colorlabel-settextcolor)
-		- [func (\*ColorLabel) SetTextScale](#func-colorlabel-settextscale)
-		- [func (\*ColorLabel) SetTextWithColor](#func-colorlabel-settextwithcolor)
-		- [func (\*ColorLabel) Tapped](#func-colorlabel-tapped)
-		- [func (\*ColorLabel) TappedSecondary](#func-colorlabel-tappedsecondary)
+- [type ColorLabel](<#ColorLabel>)
+  - [func NewColorLabel\(s string, txtColor, backColor any, tScale float32\) \*ColorLabel](<#NewColorLabel>)
+  - [func \(l \*ColorLabel\) CreateRenderer\(\) fyne.WidgetRenderer](<#ColorLabel.CreateRenderer>)
+  - [func \(l \*ColorLabel\) GetLastKeyModifier\(\) fyne.KeyModifier](<#ColorLabel.GetLastKeyModifier>)
+  - [func \(l \*ColorLabel\) MouseDown\(ev \*desktop.MouseEvent\)](<#ColorLabel.MouseDown>)
+  - [func \(l \*ColorLabel\) MouseUp\(ev \*desktop.MouseEvent\)](<#ColorLabel.MouseUp>)
+  - [func \(l \*ColorLabel\) SetBackgroundColor\(backColor any\) error](<#ColorLabel.SetBackgroundColor>)
+  - [func \(l \*ColorLabel\) SetText\(s string\)](<#ColorLabel.SetText>)
+  - [func \(l \*ColorLabel\) SetTextColor\(txtColor any\) error](<#ColorLabel.SetTextColor>)
+  - [func \(l \*ColorLabel\) SetTextScale\(tScale float32\)](<#ColorLabel.SetTextScale>)
+  - [func \(l \*ColorLabel\) SetTextWithColor\(txt string, txtColor any\)](<#ColorLabel.SetTextWithColor>)
+  - [func \(l \*ColorLabel\) Tapped\(ev \*fyne.PointEvent\)](<#ColorLabel.Tapped>)
+  - [func \(l \*ColorLabel\) TappedSecondary\(\*fyne.PointEvent\)](<#ColorLabel.TappedSecondary>)
 
 
 <a name="ColorLabel"></a>

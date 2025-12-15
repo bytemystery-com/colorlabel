@@ -22,6 +22,7 @@
 //
 // Implements a label with colored text and background as fyne widget.
 // You can use color names defined by Fyne theme or direct NRGBA values.
+// The labels can alos be clicked if needed.
 //
 // Author: Reiner Pröls
 // Licence: MIT
