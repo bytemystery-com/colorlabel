@@ -77,6 +77,10 @@ func getColor(c any) color.Color {
 		return theme.Color(v)
 	case color.NRGBA:
 		return v
+	case color.Alpha16:
+		return v
+	case color.Gray16:
+		return v
 	}
 	return color.Transparent
 }
@@ -92,6 +96,10 @@ func NewColorLabel(s string, txtColor, backColor any, tScale float32) *ColorLabe
 		}
 	case color.NRGBA:
 		backColor = c
+	case color.Alpha16:
+		backColor = c
+	case color.Gray16:
+		backColor = c
 	default:
 		return nil
 	}
@@ -102,6 +110,10 @@ func NewColorLabel(s string, txtColor, backColor any, tScale float32) *ColorLabe
 			txtColor = theme.ColorNameForeground
 		}
 	case color.NRGBA:
+		txtColor = c
+	case color.Alpha16:
+		txtColor = c
+	case color.Gray16:
 		txtColor = c
 	default:
 		return nil
@@ -184,6 +196,10 @@ func (l *ColorLabel) SetTextColor(txtColor any) error {
 		}
 	case color.NRGBA:
 		txtColor = c
+	case color.Alpha16:
+		txtColor = c
+	case color.Gray16:
+		txtColor = c
 	default:
 		return errors.New("fyne.ThemeColorName or color.NRGBA required")
 	}
@@ -201,6 +217,10 @@ func (l *ColorLabel) SetBackgroundColor(backColor any) error {
 			backColor = theme.ColorNameBackground
 		}
 	case color.NRGBA:
+		backColor = c
+	case color.Alpha16:
+		backColor = c
+	case color.Gray16:
 		backColor = c
 	default:
 		return errors.New("fyne.ThemeColorName or color.NRGBA required")

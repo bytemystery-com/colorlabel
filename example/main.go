@@ -42,7 +42,7 @@ func main() {
 	w.Resize(fyne.NewSize(1000, 800))
 	w.CenterOnScreen()
 
-	label1 := colorlabel.NewColorLabel("Hallo", "", "", 1.0)
+	label1 := colorlabel.NewColorLabel("Hallo", "", color.Transparent, 1.0)
 	label2 := colorlabel.NewColorLabel("Text in red", color.NRGBA{R: 255, G: 0, B: 0, A: 255}, "", 1.0)
 	label3 := colorlabel.NewColorLabel("Click me", theme.ColorNameForeground, theme.ColorNameSelection, 1.0)
 	label3.OnTapped = func() {
