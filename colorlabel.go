@@ -258,7 +258,11 @@ func (l *ColorLabel) SetTextScale(tScale float32) {
 // Set a text style
 func (l *ColorLabel) SetTextStyle(textStyle *fyne.TextStyle) {
 	l.textStyle = textStyle
-	l.text.TextStyle = *textStyle
+	if textStyle != nil {
+		l.text.TextStyle = *textStyle
+	} else {
+		l.text.TextStyle = fyne.TextStyle{}
+	}
 	l.text.Refresh()
 }
 
