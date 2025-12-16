@@ -22,7 +22,8 @@
 //
 // Implements a label with colored text and background as fyne widget.
 // You can use color names defined by Fyne theme or direct NRGBA values.
-// The labels can alos be clicked if needed.
+// The labels can also be clicked (primary and secondary) and double clicked if needed.
+// You can also set a Text style for bold and italic and Monospace font.
 //
 // Author: Reiner Pröls
 // Licence: MIT
@@ -44,6 +45,7 @@ import (
 var (
 	_ fyne.Widget            = (*ColorLabel)(nil)
 	_ fyne.Tappable          = (*ColorLabel)(nil)
+	_ fyne.DoubleTappable    = (*ColorLabel)(nil)
 	_ fyne.SecondaryTappable = (*ColorLabel)(nil)
 	_ desktop.Mouseable      = (*ColorLabel)(nil)
 )
@@ -52,6 +54,7 @@ var (
 // Implements
 //   - fyne.Widget
 //   - fyne.Tappable
+//   - fyne.DoubleTappable
 //	 - fyne.SecondaryTappable
 //   - desktop.Mouseable
 
@@ -63,9 +66,11 @@ type ColorLabel struct {
 	bgColor   any
 	fgColor   any
 	textScale float32
+	textStyle *fyne.TextStyle
 
 	OnTapped          func()
 	OnTappedSecondary func()
+	OnDoubleTapped    func()
 	lastKeyModifier   fyne.KeyModifier
 }
 
@@ -92,7 +97,7 @@ func NewColorLabel(s string, txtColor, backColor any, tScale float32) *ColorLabe
 	switch c := any(backColor).(type) {
 	case fyne.ThemeColorName, string:
 		if c == "" {
-			backColor = theme.ColorNameBackground
+			backColor = color.Transparent
 		}
 	case color.NRGBA:
 		backColor = c
@@ -132,6 +137,9 @@ func NewColorLabel(s string, txtColor, backColor any, tScale float32) *ColorLabe
 	}
 
 	colorLabel.text.TextSize = theme.TextSize() * tScale
+	if colorLabel.textStyle != nil {
+		colorLabel.text.TextStyle = *colorLabel.textStyle
+	}
 	colorLabel.ExtendBaseWidget(colorLabel)
 	fyne.CurrentApp().Settings().AddListener(func(settings fyne.Settings) {
 		colorLabel.text.Color = getColor(colorLabel.fgColor)
@@ -162,6 +170,13 @@ func (l *ColorLabel) Tapped(ev *fyne.PointEvent) {
 func (l *ColorLabel) TappedSecondary(*fyne.PointEvent) {
 	if l.OnTappedSecondary != nil {
 		l.OnTappedSecondary()
+	}
+}
+
+// DoubleTappable interface
+func (l *ColorLabel) DoubleTapped(ev *fyne.PointEvent) {
+	if l.OnDoubleTapped != nil {
+		l.OnDoubleTapped()
 	}
 }
 
@@ -214,7 +229,7 @@ func (l *ColorLabel) SetBackgroundColor(backColor any) error {
 	switch c := backColor.(type) {
 	case fyne.ThemeColorName, string:
 		if c == "" {
-			backColor = theme.ColorNameBackground
+			backColor = color.Transparent
 		}
 	case color.NRGBA:
 		backColor = c
@@ -237,6 +252,13 @@ func (l *ColorLabel) SetTextScale(tScale float32) {
 	}
 	l.text.TextSize = theme.TextSize() * tScale
 	l.textScale = tScale
+	l.text.Refresh()
+}
+
+// Set a text style
+func (l *ColorLabel) SetTextStyle(textStyle *fyne.TextStyle) {
+	l.textStyle = textStyle
+	l.text.TextStyle = *textStyle
 	l.text.Refresh()
 }
 

@@ -1,7 +1,8 @@
 # ColorLabel for [fyne](https://fyne.io/)
 Implements a label with colored text and background as fyne widget.  
 You can use color names defined by Fyne theme or direct NRGBA values.  
-The labels can alos be clicked if needed.  
+The labels can also be clicked (primary and secondary) and double clicked if needed.  
+You can also set a Text style for bold and italic and Monospace font.  
 
 Author: Reiner Pröls  
 Licence: MIT  
@@ -50,7 +51,7 @@ func main() {
 	w.Resize(fyne.NewSize(1000, 800))
 	w.CenterOnScreen()
 
-	label1 := colorlabel.NewColorLabel("Hallo", "", "", 1.0)
+	label1 := colorlabel.NewColorLabel("Hallo", "", color.Transparent, 1.0)
 	label2 := colorlabel.NewColorLabel("Text in red", color.NRGBA{R: 255, G: 0, B: 0, A: 255}, "", 1.0)
 	label3 := colorlabel.NewColorLabel("Click me", theme.ColorNameForeground, theme.ColorNameSelection, 1.0)
 	label3.OnTapped = func() {
@@ -72,11 +73,23 @@ func main() {
 	label6.OnTappedSecondary = func() {
 		label6.SetTextScale(2.0)
 	}
+	label6.OnDoubleTapped = func() {
+		label6.SetTextWithColor("Double tapped", color.NRGBA{R: 255, G: 255, B: 0, A: 255})
+		label6.SetTextScale(1.0)
+	}
+	var label7 *colorlabel.ColorLabel
+	label7 = colorlabel.NewColorLabel("With textstyle", color.NRGBA{R: 0, G: 0, B: 255, A: 255}, color.NRGBA{R: 192, G: 192, B: 192, A: 255}, 1.0)
+	label7.SetTextStyle(&fyne.TextStyle{Bold: true, Italic: true})
 
-	vbox := container.NewGridWrap(fyne.NewSize(w.Canvas().Size().Width, 50), label1, label2, label3, label4, label5, label6)
+	var label8 *colorlabel.ColorLabel
+	label8 = colorlabel.NewColorLabel("Monospace - il1234W", color.NRGBA{R: 0, G: 0, B: 255, A: 255}, color.NRGBA{R: 192, G: 192, B: 192, A: 255}, 1.0)
+	label8.SetTextStyle(&fyne.TextStyle{Monospace: true})
+
+	vbox := container.NewGridWrap(fyne.NewSize(w.Canvas().Size().Width, 50), label1, label2, label3, label4, label5, label6, label7, label8)
 	w.SetContent(vbox)
 
 	w.ShowAndRun()
+}
 }
 ```
 
@@ -100,6 +113,7 @@ import "github.com/bytemystery-com/colorlabel"
 - [type ColorLabel](<#ColorLabel>)
   - [func NewColorLabel\(s string, txtColor, backColor any, tScale float32\) \*ColorLabel](<#NewColorLabel>)
   - [func \(l \*ColorLabel\) CreateRenderer\(\) fyne.WidgetRenderer](<#ColorLabel.CreateRenderer>)
+  - [func \(l \*ColorLabel\) DoubleTapped\(ev \*fyne.PointEvent\)](<#ColorLabel.DoubleTapped>)
   - [func \(l \*ColorLabel\) GetLastKeyModifier\(\) fyne.KeyModifier](<#ColorLabel.GetLastKeyModifier>)
   - [func \(l \*ColorLabel\) MouseDown\(ev \*desktop.MouseEvent\)](<#ColorLabel.MouseDown>)
   - [func \(l \*ColorLabel\) MouseUp\(ev \*desktop.MouseEvent\)](<#ColorLabel.MouseUp>)
@@ -107,6 +121,7 @@ import "github.com/bytemystery-com/colorlabel"
   - [func \(l \*ColorLabel\) SetText\(s string\)](<#ColorLabel.SetText>)
   - [func \(l \*ColorLabel\) SetTextColor\(txtColor any\) error](<#ColorLabel.SetTextColor>)
   - [func \(l \*ColorLabel\) SetTextScale\(tScale float32\)](<#ColorLabel.SetTextScale>)
+  - [func \(l \*ColorLabel\) SetTextStyle\(textStyle \*fyne.TextStyle\)](<#ColorLabel.SetTextStyle>)
   - [func \(l \*ColorLabel\) SetTextWithColor\(txt string, txtColor any\)](<#ColorLabel.SetTextWithColor>)
   - [func \(l \*ColorLabel\) Tapped\(ev \*fyne.PointEvent\)](<#ColorLabel.Tapped>)
   - [func \(l \*ColorLabel\) TappedSecondary\(\*fyne.PointEvent\)](<#ColorLabel.TappedSecondary>)
@@ -123,6 +138,7 @@ type ColorLabel struct {
 
     OnTapped          func()
     OnTappedSecondary func()
+    OnDoubleTapped    func()
     // contains filtered or unexported fields
 }
 ```
@@ -144,6 +160,15 @@ func (l *ColorLabel) CreateRenderer() fyne.WidgetRenderer
 ```
 
 Widget interface
+
+<a name="ColorLabel.DoubleTapped"></a>
+### func \(\*ColorLabel\) DoubleTapped
+
+```go
+func (l *ColorLabel) DoubleTapped(ev *fyne.PointEvent)
+```
+
+DoubleTappable interface
 
 <a name="ColorLabel.GetLastKeyModifier"></a>
 ### func \(\*ColorLabel\) GetLastKeyModifier
@@ -207,6 +232,15 @@ func (l *ColorLabel) SetTextScale(tScale float32)
 ```
 
 Set new text scale factor
+
+<a name="ColorLabel.SetTextStyle"></a>
+### func \(\*ColorLabel\) SetTextStyle
+
+```go
+func (l *ColorLabel) SetTextStyle(textStyle *fyne.TextStyle)
+```
+
+Set a text style
 
 <a name="ColorLabel.SetTextWithColor"></a>
 ### func \(\*ColorLabel\) SetTextWithColor

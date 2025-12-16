@@ -64,8 +64,19 @@ func main() {
 	label6.OnTappedSecondary = func() {
 		label6.SetTextScale(2.0)
 	}
+	label6.OnDoubleTapped = func() {
+		label6.SetTextWithColor("Double tapped", color.NRGBA{R: 255, G: 255, B: 0, A: 255})
+		label6.SetTextScale(1.0)
+	}
+	var label7 *colorlabel.ColorLabel
+	label7 = colorlabel.NewColorLabel("With textstyle", color.NRGBA{R: 0, G: 0, B: 255, A: 255}, color.NRGBA{R: 192, G: 192, B: 192, A: 255}, 1.0)
+	label7.SetTextStyle(&fyne.TextStyle{Bold: true, Italic: true})
 
-	vbox := container.NewGridWrap(fyne.NewSize(w.Canvas().Size().Width, 50), label1, label2, label3, label4, label5, label6)
+	var label8 *colorlabel.ColorLabel
+	label8 = colorlabel.NewColorLabel("Monospace - il1234W", color.NRGBA{R: 0, G: 0, B: 255, A: 255}, color.NRGBA{R: 192, G: 192, B: 192, A: 255}, 1.0)
+	label8.SetTextStyle(&fyne.TextStyle{Monospace: true})
+
+	vbox := container.NewGridWrap(fyne.NewSize(w.Canvas().Size().Width, 50), label1, label2, label3, label4, label5, label6, label7, label8)
 	w.SetContent(vbox)
 
 	w.ShowAndRun()
