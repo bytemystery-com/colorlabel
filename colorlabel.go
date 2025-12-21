@@ -165,10 +165,11 @@ func (l *ColorLabel) CreateRenderer() fyne.WidgetRenderer {
 // ColorLabelRenderer implements:
 //   - fyne.WidgetRenderer
 type ColorLabelRenderer struct {
-	w    *ColorLabel
-	text *canvas.Text
-	bg   *canvas.Rectangle
-	objs []fyne.CanvasObject
+	w        *ColorLabel
+	text     *canvas.Text
+	bg       *canvas.Rectangle
+	objs     []fyne.CanvasObject
+	maxWidth float32
 }
 
 // WidgetRenderer interface
@@ -178,9 +179,7 @@ func (r *ColorLabelRenderer) Layout(size fyne.Size) {
 	s2 := fyne.NewSize(size.Width, size.Height)
 	p := fyne.NewPos(pad, pad)
 	p2 := fyne.NewPos(0, 0)
-	r.text.TextSize = theme.TextSize() * r.w.textScale
-	r.text.TextStyle = *r.w.textStyle
-	r.text.Text = r.w.truncateText(r.w.fullText, s.Width, r.text)
+	r.maxWidth = size.Width
 
 	r.text.Resize(s)
 	r.bg.Resize(s2)
@@ -196,6 +195,10 @@ func (r *ColorLabelRenderer) MinSize() fyne.Size {
 
 // WidgetRenderer interface
 func (r *ColorLabelRenderer) Refresh() {
+	r.text.TextSize = theme.TextSize() * r.w.textScale
+	r.text.TextStyle = *r.w.textStyle
+	r.text.Text = r.w.truncateText(r.w.fullText, r.maxWidth, r.text)
+
 	r.text.Color = getColor(r.w.fgColor)
 	r.text.Refresh()
 	r.bg.FillColor = getColor(r.w.bgColor)
