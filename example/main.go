@@ -76,7 +76,11 @@ func main() {
 	label8 = colorlabel.NewColorLabel("Monospace - il1234W", color.NRGBA{R: 0, G: 0, B: 255, A: 255}, color.NRGBA{R: 192, G: 192, B: 192, A: 255}, 1.0)
 	label8.SetTextStyle(&fyne.TextStyle{Monospace: true})
 
-	vbox := container.NewGridWrap(fyne.NewSize(w.Canvas().Size().Width, 50), label1, label2, label3, label4, label5, label6, label7, label8)
+	var label9 *colorlabel.ColorLabel
+	label9 = colorlabel.NewColorLabel("A very long text - Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", "", "", 1.0)
+	label9.SetTruncate(true)
+
+	vbox := container.NewGridWrap(fyne.NewSize(w.Canvas().Size().Width, 50), label1, label2, label3, label4, label5, label6, label7, label8, label9)
 	w.SetContent(vbox)
 
 	w.ShowAndRun()

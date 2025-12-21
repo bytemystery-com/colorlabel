@@ -24,6 +24,7 @@
 // You can use color names defined by Fyne theme or direct NRGBA values.
 // The labels can also be clicked (primary and secondary) and double clicked if needed.
 // You can also set a Text style for bold and italic and Monospace font.
+// Now it is also possible to set that too long text is truncated.
 //
 // Author: Reiner Pröls
 // Licence: MIT
@@ -36,7 +37,6 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
-	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
@@ -48,6 +48,7 @@ var (
 	_ fyne.DoubleTappable    = (*ColorLabel)(nil)
 	_ fyne.SecondaryTappable = (*ColorLabel)(nil)
 	_ desktop.Mouseable      = (*ColorLabel)(nil)
+	_ fyne.WidgetRenderer    = (*ColorLabelRenderer)(nil)
 )
 
 // Color label text with color (text and background), also clickable if needed
@@ -60,13 +61,13 @@ var (
 
 type ColorLabel struct {
 	widget.BaseWidget
-	text *canvas.Text
-	bg   *canvas.Rectangle
 
+	fullText  string
 	bgColor   any
 	fgColor   any
 	textScale float32
 	textStyle *fyne.TextStyle
+	truncate  bool
 
 	OnTapped          func()
 	OnTappedSecondary func()
@@ -132,31 +133,79 @@ func NewColorLabel(s string, txtColor, backColor any, tScale float32) *ColorLabe
 		bgColor:   backColor,
 		fgColor:   txtColor,
 		textScale: tScale,
-		text:      canvas.NewText(s, getColor(txtColor)),
-		bg:        canvas.NewRectangle(getColor(backColor)),
+		fullText:  s,
+		textStyle: &fyne.TextStyle{},
 	}
 
-	colorLabel.text.TextSize = theme.TextSize() * tScale
-	if colorLabel.textStyle != nil {
-		colorLabel.text.TextStyle = *colorLabel.textStyle
-	}
 	colorLabel.ExtendBaseWidget(colorLabel)
-	fyne.CurrentApp().Settings().AddListener(func(settings fyne.Settings) {
-		colorLabel.text.Color = getColor(colorLabel.fgColor)
-		colorLabel.text.TextSize = theme.TextSize() * tScale
-		colorLabel.bg.FillColor = getColor(colorLabel.bgColor)
-		colorLabel.text.Refresh()
-		colorLabel.bg.Refresh()
-	})
+
+	/*
+
+		fyne.CurrentApp().Settings().AddListener(func(settings fyne.Settings) {
+			colorLabel.fgColor = getColor(colorLabel.fgColor)
+			colorLabel.bgColor = getColor(colorLabel.bgColor)
+			colorLabel.Refresh()
+		})
+	*/
 	return colorLabel
 }
 
 // Widget interface
 func (l *ColorLabel) CreateRenderer() fyne.WidgetRenderer {
-	return widget.NewSimpleRenderer(container.NewStack(
-		l.bg,
-		container.NewPadded(l.text),
-	))
+	t := canvas.NewText(l.fullText, getColor(l.fgColor))
+	b := canvas.NewRectangle(getColor(l.bgColor))
+	return &ColorLabelRenderer{
+		w:    l,
+		text: t,
+		bg:   b,
+		objs: []fyne.CanvasObject{b, t},
+	}
+}
+
+// ColorLabelRenderer implements:
+//   - fyne.WidgetRenderer
+type ColorLabelRenderer struct {
+	w    *ColorLabel
+	text *canvas.Text
+	bg   *canvas.Rectangle
+	objs []fyne.CanvasObject
+}
+
+// WidgetRenderer interface
+func (r *ColorLabelRenderer) Layout(size fyne.Size) {
+	pad := theme.Padding()
+	s := fyne.NewSize(size.Width-2*pad, size.Height-2*pad)
+	p := fyne.NewPos(pad, pad)
+	r.text.TextSize = theme.TextSize() * r.w.textScale
+	r.text.TextStyle = *r.w.textStyle
+	r.text.Text = r.w.truncateText(r.w.fullText, s.Width, r.text)
+
+	r.text.Resize(s)
+	r.bg.Resize(s)
+	r.text.Move(p)
+	r.bg.Move(p)
+}
+
+// WidgetRenderer interface
+func (r *ColorLabelRenderer) MinSize() fyne.Size {
+	h := r.text.MinSize().Height
+	return fyne.NewSize(0, h)
+}
+
+// WidgetRenderer interface
+func (r *ColorLabelRenderer) Refresh() {
+	r.text.Color = getColor(r.w.fgColor)
+	r.text.Refresh()
+	r.bg.FillColor = getColor(r.w.bgColor)
+	r.bg.Refresh()
+}
+
+// WidgetRenderer interface
+func (r *ColorLabelRenderer) Destroy() {
+}
+
+func (r *ColorLabelRenderer) Objects() []fyne.CanvasObject {
+	return r.objs
 }
 
 // Tappable interface
@@ -197,8 +246,30 @@ func (l *ColorLabel) GetLastKeyModifier() fyne.KeyModifier {
 
 // Set new text
 func (l *ColorLabel) SetText(s string) {
-	l.text.Text = s
-	l.text.Refresh()
+	l.fullText = s
+	l.Refresh()
+}
+
+func (l *ColorLabel) truncateText(s string, maxWidth float32, text *canvas.Text) string {
+	if !l.truncate {
+		return s
+	}
+	maxWidth -= theme.Padding() * 4
+	ellipsis := "…"
+	ellW := fyne.MeasureText(ellipsis, text.TextSize, text.TextStyle).Width
+
+	r := []rune(s)
+	if fyne.MeasureText(s, text.TextSize, text.TextStyle).Width <= maxWidth {
+		return s
+	}
+
+	for len(r) > 0 {
+		r = r[:len(r)-1]
+		if fyne.MeasureText(string(r), text.TextSize, text.TextStyle).Width+ellW <= maxWidth {
+			return string(r) + ellipsis
+		}
+	}
+	return ellipsis
 }
 
 // Set new text color
@@ -218,8 +289,8 @@ func (l *ColorLabel) SetTextColor(txtColor any) error {
 	default:
 		return errors.New("fyne.ThemeColorName or color.NRGBA required")
 	}
-	l.text.Color = getColor(txtColor)
-	l.text.Refresh()
+	l.fgColor = txtColor
+	l.Refresh()
 	return nil
 }
 
@@ -240,8 +311,8 @@ func (l *ColorLabel) SetBackgroundColor(backColor any) error {
 	default:
 		return errors.New("fyne.ThemeColorName or color.NRGBA required")
 	}
-	l.bg.FillColor = getColor(backColor)
-	l.bg.Refresh()
+	l.bgColor = backColor
+	l.Refresh()
 	return nil
 }
 
@@ -250,25 +321,28 @@ func (l *ColorLabel) SetTextScale(tScale float32) {
 	if tScale <= 0 {
 		tScale = 1
 	}
-	l.text.TextSize = theme.TextSize() * tScale
 	l.textScale = tScale
-	l.text.Refresh()
+	l.Refresh()
 }
 
 // Set a text style
 func (l *ColorLabel) SetTextStyle(textStyle *fyne.TextStyle) {
-	l.textStyle = textStyle
 	if textStyle != nil {
-		l.text.TextStyle = *textStyle
+		l.textStyle = textStyle
 	} else {
-		l.text.TextStyle = fyne.TextStyle{}
+		l.textStyle = &fyne.TextStyle{}
 	}
-	l.text.Refresh()
+	l.Refresh()
 }
 
 // Set text and text color
 // txtColor is NRGBA or fyne.ThemeColorName
 func (l *ColorLabel) SetTextWithColor(txt string, txtColor any) {
-	l.text.Text = txt
+	l.fullText = txt
 	l.SetTextColor(txtColor)
+}
+
+func (l *ColorLabel) SetTruncate(tr bool) {
+	l.truncate = tr
+	l.Refresh()
 }
