@@ -3,7 +3,6 @@ module github.com/bytemystery-com/colorlabel
 go 1.25.5
 
 require (
-	fyne.io/fyne v1.4.3
 	fyne.io/fyne/v2 v2.7.1
 )
 
@@ -43,3 +42,5 @@ require (
 	golang.org/x/text v0.32.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace bytemystery-com/colorlabel => ../colorlabel

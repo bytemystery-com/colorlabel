@@ -175,20 +175,22 @@ type ColorLabelRenderer struct {
 func (r *ColorLabelRenderer) Layout(size fyne.Size) {
 	pad := theme.Padding()
 	s := fyne.NewSize(size.Width-2*pad, size.Height-2*pad)
+	s2 := fyne.NewSize(size.Width, size.Height)
 	p := fyne.NewPos(pad, pad)
+	p2 := fyne.NewPos(0, 0)
 	r.text.TextSize = theme.TextSize() * r.w.textScale
 	r.text.TextStyle = *r.w.textStyle
 	r.text.Text = r.w.truncateText(r.w.fullText, s.Width, r.text)
 
 	r.text.Resize(s)
-	r.bg.Resize(s)
+	r.bg.Resize(s2)
 	r.text.Move(p)
-	r.bg.Move(p)
+	r.bg.Move(p2)
 }
 
 // WidgetRenderer interface
 func (r *ColorLabelRenderer) MinSize() fyne.Size {
-	h := r.text.MinSize().Height
+	h := r.text.MinSize().Height + 2*theme.Padding()
 	return fyne.NewSize(0, h)
 }
 
