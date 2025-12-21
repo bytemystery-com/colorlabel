@@ -259,7 +259,7 @@ func (l *ColorLabel) truncateText(s string, maxWidth float32, text *canvas.Text)
 	if !l.truncate {
 		return s
 	}
-	maxWidth -= theme.Padding() * 4
+	maxWidth -= theme.Padding() * 2
 	ellipsis := "…"
 	ellW := fyne.MeasureText(ellipsis, text.TextSize, text.TextStyle).Width
 
