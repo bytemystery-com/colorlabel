@@ -78,9 +78,13 @@ func main() {
 
 	var label9 *colorlabel.ColorLabel
 	label9 = colorlabel.NewColorLabel("A very long text - Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", "", "", 1.0)
-	label9.SetTruncate(true)
+	label9.SetTruncateMode(colorlabel.End)
 
-	vbox := container.NewGridWrap(fyne.NewSize(w.Canvas().Size().Width, 50), label1, label2, label3, label4, label5, label6, label7, label8, label9)
+	var label10 *colorlabel.ColorLabel
+	label10 = colorlabel.NewColorLabel("A very long text - Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.", "", "", 1.0)
+	label10.SetTruncateMode(colorlabel.Begin)
+
+	vbox := container.NewGridWrap(fyne.NewSize(w.Canvas().Size().Width, 50), label1, label2, label3, label4, label5, label6, label7, label8, label9, label10)
 	w.SetContent(vbox)
 
 	w.ShowAndRun()

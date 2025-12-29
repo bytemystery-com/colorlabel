@@ -59,6 +59,14 @@ var (
 //	 - fyne.SecondaryTappable
 //   - desktop.Mouseable
 
+type TruncateModeType int
+
+const (
+	None TruncateModeType = iota
+	End
+	Begin
+)
+
 type ColorLabel struct {
 	widget.BaseWidget
 
@@ -67,7 +75,7 @@ type ColorLabel struct {
 	fgColor   any
 	textScale float32
 	textStyle *fyne.TextStyle
-	truncate  bool
+	truncate  TruncateModeType
 
 	OnTapped          func()
 	OnTappedSecondary func()
@@ -251,12 +259,14 @@ func (l *ColorLabel) GetLastKeyModifier() fyne.KeyModifier {
 
 // Set new text
 func (l *ColorLabel) SetText(s string) {
-	l.fullText = s
-	l.Refresh()
+	if l.fullText != s {
+		l.fullText = s
+		l.Refresh()
+	}
 }
 
 func (l *ColorLabel) truncateText(s string, maxWidth float32, text *canvas.Text) string {
-	if !l.truncate {
+	if l.truncate == None {
 		return s
 	}
 	maxWidth -= theme.Padding() * 2
@@ -269,9 +279,20 @@ func (l *ColorLabel) truncateText(s string, maxWidth float32, text *canvas.Text)
 	}
 
 	for len(r) > 0 {
-		r = r[:len(r)-1]
+		switch l.truncate {
+		case End:
+			r = r[:len(r)-1]
+		case Begin:
+			r = r[1:]
+		}
+
 		if fyne.MeasureText(string(r), text.TextSize, text.TextStyle).Width+ellW <= maxWidth {
-			return string(r) + ellipsis
+			switch l.truncate {
+			case End:
+				return string(r) + ellipsis
+			case Begin:
+				return ellipsis + string(r)
+			}
 		}
 	}
 	return ellipsis
@@ -294,8 +315,10 @@ func (l *ColorLabel) SetTextColor(txtColor any) error {
 	default:
 		return errors.New("fyne.ThemeColorName or color.NRGBA required")
 	}
-	l.fgColor = txtColor
-	l.Refresh()
+	if l.fgColor != txtColor {
+		l.fgColor = txtColor
+		l.Refresh()
+	}
 	return nil
 }
 
@@ -316,8 +339,10 @@ func (l *ColorLabel) SetBackgroundColor(backColor any) error {
 	default:
 		return errors.New("fyne.ThemeColorName or color.NRGBA required")
 	}
-	l.bgColor = backColor
-	l.Refresh()
+	if l.bgColor != backColor {
+		l.bgColor = backColor
+		l.Refresh()
+	}
 	return nil
 }
 
@@ -326,8 +351,10 @@ func (l *ColorLabel) SetTextScale(tScale float32) {
 	if tScale <= 0 {
 		tScale = 1
 	}
-	l.textScale = tScale
-	l.Refresh()
+	if l.textScale != tScale {
+		l.textScale = tScale
+		l.Refresh()
+	}
 }
 
 // Set a text style
@@ -343,11 +370,20 @@ func (l *ColorLabel) SetTextStyle(textStyle *fyne.TextStyle) {
 // Set text and text color
 // txtColor is NRGBA or fyne.ThemeColorName
 func (l *ColorLabel) SetTextWithColor(txt string, txtColor any) {
-	l.fullText = txt
+	if l.fullText != txt {
+		l.fullText = txt
+		l.Refresh()
+	}
 	l.SetTextColor(txtColor)
 }
 
 func (l *ColorLabel) SetTruncate(tr bool) {
-	l.truncate = tr
-	l.Refresh()
+	l.SetTruncateMode(End)
+}
+
+func (l *ColorLabel) SetTruncateMode(tr TruncateModeType) {
+	if l.truncate != tr {
+		l.truncate = tr
+		l.Refresh()
+	}
 }
