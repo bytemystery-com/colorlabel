@@ -103,6 +103,9 @@ func getColor(c any) color.Color {
 // txtColor is NRGBA or fyne.ThemeColorName
 // backColor is NRGBA or fyne.ThemeColorName
 func NewColorLabel(s string, txtColor, backColor any, tScale float32) *ColorLabel {
+	if backColor == nil {
+		backColor = ""
+	}
 	switch c := any(backColor).(type) {
 	case fyne.ThemeColorName, string:
 		if c == "" {
@@ -118,6 +121,9 @@ func NewColorLabel(s string, txtColor, backColor any, tScale float32) *ColorLabe
 		return nil
 	}
 
+	if txtColor == nil {
+		txtColor = ""
+	}
 	switch c := any(txtColor).(type) {
 	case fyne.ThemeColorName, string:
 		if c == "" {
@@ -301,6 +307,9 @@ func (l *ColorLabel) truncateText(s string, maxWidth float32, text *canvas.Text)
 // Set new text color
 // txtColor is NRGBA or fyne.ThemeColorName
 func (l *ColorLabel) SetTextColor(txtColor any) error {
+	if txtColor == nil {
+		txtColor = ""
+	}
 	switch c := txtColor.(type) {
 	case fyne.ThemeColorName, string:
 		if c == "" {
@@ -325,6 +334,9 @@ func (l *ColorLabel) SetTextColor(txtColor any) error {
 // Set new background color
 // backColor is NRGBA or fyne.ThemeColorName
 func (l *ColorLabel) SetBackgroundColor(backColor any) error {
+	if backColor == nil {
+		backColor = ""
+	}
 	switch c := backColor.(type) {
 	case fyne.ThemeColorName, string:
 		if c == "" {
