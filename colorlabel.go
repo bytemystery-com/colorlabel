@@ -271,6 +271,10 @@ func (l *ColorLabel) SetText(s string) {
 	}
 }
 
+func (l *ColorLabel) GetText() string {
+	return l.fullText
+}
+
 func (l *ColorLabel) truncateText(s string, maxWidth float32, text *canvas.Text) string {
 	if l.truncate == None {
 		return s
