@@ -123,6 +123,7 @@ import "github.com/bytemystery-com/colorlabel"
   - [func \(l \*ColorLabel\) CreateRenderer\(\) fyne.WidgetRenderer](<#ColorLabel.CreateRenderer>)
   - [func \(l \*ColorLabel\) DoubleTapped\(ev \*fyne.PointEvent\)](<#ColorLabel.DoubleTapped>)
   - [func \(l \*ColorLabel\) GetLastKeyModifier\(\) fyne.KeyModifier](<#ColorLabel.GetLastKeyModifier>)
+  - [func \(l \*ColorLabel\) GetText\(\) string](<#ColorLabel.GetText>)
   - [func \(l \*ColorLabel\) MouseDown\(ev \*desktop.MouseEvent\)](<#ColorLabel.MouseDown>)
   - [func \(l \*ColorLabel\) MouseUp\(ev \*desktop.MouseEvent\)](<#ColorLabel.MouseUp>)
   - [func \(l \*ColorLabel\) SetBackgroundColor\(backColor any\) error](<#ColorLabel.SetBackgroundColor>)
@@ -195,6 +196,15 @@ func (l *ColorLabel) GetLastKeyModifier() fyne.KeyModifier
 ```
 
 User functions Get the last keyboard modifier
+
+<a name="ColorLabel.GetText"></a>
+### func \(\*ColorLabel\) GetText
+
+```go
+func (l *ColorLabel) GetText() string
+```
+
+
 
 <a name="ColorLabel.MouseDown"></a>
 ### func \(\*ColorLabel\) MouseDown
