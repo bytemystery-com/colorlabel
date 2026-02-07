@@ -204,7 +204,8 @@ func (r *ColorLabelRenderer) Layout(size fyne.Size) {
 // WidgetRenderer interface
 func (r *ColorLabelRenderer) MinSize() fyne.Size {
 	h := r.text.MinSize().Height + 2*theme.Padding()
-	return fyne.NewSize(0, h)
+	w := r.text.MinSize().Width + 2*theme.Padding()
+	return fyne.NewSize(w, h)
 }
 
 // WidgetRenderer interface
