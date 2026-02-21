@@ -122,10 +122,12 @@ import "github.com/bytemystery-com/colorlabel"
   - [func NewColorLabel\(s string, txtColor, backColor any, tScale float32\) \*ColorLabel](<#NewColorLabel>)
   - [func \(l \*ColorLabel\) CreateRenderer\(\) fyne.WidgetRenderer](<#ColorLabel.CreateRenderer>)
   - [func \(l \*ColorLabel\) DoubleTapped\(ev \*fyne.PointEvent\)](<#ColorLabel.DoubleTapped>)
+  - [func \(l \*ColorLabel\) GetAlinment\(\) fyne.TextAlign](<#ColorLabel.GetAlinment>)
   - [func \(l \*ColorLabel\) GetLastKeyModifier\(\) fyne.KeyModifier](<#ColorLabel.GetLastKeyModifier>)
   - [func \(l \*ColorLabel\) GetText\(\) string](<#ColorLabel.GetText>)
   - [func \(l \*ColorLabel\) MouseDown\(ev \*desktop.MouseEvent\)](<#ColorLabel.MouseDown>)
   - [func \(l \*ColorLabel\) MouseUp\(ev \*desktop.MouseEvent\)](<#ColorLabel.MouseUp>)
+  - [func \(l \*ColorLabel\) SetAlinment\(align fyne.TextAlign\)](<#ColorLabel.SetAlinment>)
   - [func \(l \*ColorLabel\) SetBackgroundColor\(backColor any\) error](<#ColorLabel.SetBackgroundColor>)
   - [func \(l \*ColorLabel\) SetText\(s string\)](<#ColorLabel.SetText>)
   - [func \(l \*ColorLabel\) SetTextColor\(txtColor any\) error](<#ColorLabel.SetTextColor>)
@@ -188,6 +190,15 @@ func (l *ColorLabel) DoubleTapped(ev *fyne.PointEvent)
 
 DoubleTappable interface
 
+<a name="ColorLabel.GetAlinment"></a>
+### func \(\*ColorLabel\) GetAlinment
+
+```go
+func (l *ColorLabel) GetAlinment() fyne.TextAlign
+```
+
+
+
 <a name="ColorLabel.GetLastKeyModifier"></a>
 ### func \(\*ColorLabel\) GetLastKeyModifier
 
@@ -223,6 +234,15 @@ func (l *ColorLabel) MouseUp(ev *desktop.MouseEvent)
 ```
 
 Mouseable interface
+
+<a name="ColorLabel.SetAlinment"></a>
+### func \(\*ColorLabel\) SetAlinment
+
+```go
+func (l *ColorLabel) SetAlinment(align fyne.TextAlign)
+```
+
+
 
 <a name="ColorLabel.SetBackgroundColor"></a>
 ### func \(\*ColorLabel\) SetBackgroundColor

@@ -87,7 +87,24 @@ func main() {
 	var label11 *colorlabel.ColorLabel
 	label11 = colorlabel.NewColorLabel("Colors as nil for using default colors.", nil, nil, 1.0)
 
-	vbox := container.NewGridWrap(fyne.NewSize(w.Canvas().Size().Width, 50), label1, label2, label3, label4, label5, label6, label7, label8, label9, label10, label11)
+	var label12 *colorlabel.ColorLabel
+	label12 = colorlabel.NewColorLabel("Alignment (click for change)", nil, nil, 1.0)
+	label12.SetAlinment(fyne.TextAlignLeading)
+	label12.OnTapped = func() {
+		var a fyne.TextAlign = fyne.TextAlignLeading
+		switch label12.GetAlinment() {
+		case fyne.TextAlignLeading:
+			a = fyne.TextAlignTrailing
+		case fyne.TextAlignTrailing:
+			a = fyne.TextAlignCenter
+		case fyne.TextAlignCenter:
+			a = fyne.TextAlignLeading
+		}
+		label12.SetAlinment(a)
+	}
+
+	vbox := container.NewGridWrap(fyne.NewSize(w.Canvas().Size().Width, 50), label1, label2, label3, label4,
+		label5, label6, label7, label8, label9, label10, label11, label12)
 	w.SetContent(vbox)
 
 	w.ShowAndRun()

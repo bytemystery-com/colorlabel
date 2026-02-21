@@ -81,6 +81,7 @@ type ColorLabel struct {
 	OnTappedSecondary func()
 	OnDoubleTapped    func()
 	lastKeyModifier   fyne.KeyModifier
+	alignment         fyne.TextAlign
 }
 
 func getColor(c any) color.Color {
@@ -149,6 +150,7 @@ func NewColorLabel(s string, txtColor, backColor any, tScale float32) *ColorLabe
 		textScale: tScale,
 		fullText:  s,
 		textStyle: &fyne.TextStyle{},
+		alignment: fyne.TextAlignLeading,
 	}
 
 	colorLabel.ExtendBaseWidget(colorLabel)
@@ -212,6 +214,7 @@ func (r *ColorLabelRenderer) MinSize() fyne.Size {
 func (r *ColorLabelRenderer) Refresh() {
 	r.text.TextSize = theme.TextSize() * r.w.textScale
 	r.text.TextStyle = *r.w.textStyle
+	r.text.Alignment = r.w.alignment
 	r.text.Text = r.w.truncateText(r.w.fullText, r.maxWidth, r.text)
 
 	r.text.Color = getColor(r.w.fgColor)
@@ -403,4 +406,13 @@ func (l *ColorLabel) SetTruncateMode(tr TruncateModeType) {
 		l.truncate = tr
 		l.Refresh()
 	}
+}
+
+func (l *ColorLabel) SetAlinment(align fyne.TextAlign) {
+	l.alignment = align
+	l.Refresh()
+}
+
+func (l *ColorLabel) GetAlinment() fyne.TextAlign {
+	return l.alignment
 }
