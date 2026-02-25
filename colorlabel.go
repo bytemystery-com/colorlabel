@@ -201,6 +201,8 @@ func (r *ColorLabelRenderer) Layout(size fyne.Size) {
 	r.bg.Resize(s2)
 	r.text.Move(p)
 	r.bg.Move(p2)
+	r.text.Text = r.w.truncateText(r.w.fullText, r.maxWidth, r.text)
+	r.text.Refresh()
 }
 
 // WidgetRenderer interface
