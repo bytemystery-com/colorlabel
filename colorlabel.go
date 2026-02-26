@@ -201,7 +201,17 @@ func (r *ColorLabelRenderer) Layout(size fyne.Size) {
 	r.bg.Resize(s2)
 	r.text.Move(p)
 	r.bg.Move(p2)
+	r.setTextProperties()
+	r.text.Refresh()
+}
+
+func (r *ColorLabelRenderer) setTextProperties() {
 	r.text.Text = r.w.truncateText(r.w.fullText, r.maxWidth, r.text)
+	r.text.TextSize = theme.TextSize() * r.w.textScale
+	r.text.TextStyle = *r.w.textStyle
+	r.text.Alignment = r.w.alignment
+	r.text.Text = r.w.truncateText(r.w.fullText, r.maxWidth, r.text)
+	r.text.Color = getColor(r.w.fgColor)
 	r.text.Refresh()
 }
 
@@ -214,13 +224,8 @@ func (r *ColorLabelRenderer) MinSize() fyne.Size {
 
 // WidgetRenderer interface
 func (r *ColorLabelRenderer) Refresh() {
-	r.text.TextSize = theme.TextSize() * r.w.textScale
-	r.text.TextStyle = *r.w.textStyle
-	r.text.Alignment = r.w.alignment
-	r.text.Text = r.w.truncateText(r.w.fullText, r.maxWidth, r.text)
+	r.setTextProperties()
 
-	r.text.Color = getColor(r.w.fgColor)
-	r.text.Refresh()
 	r.bg.FillColor = getColor(r.w.bgColor)
 	r.bg.Refresh()
 }
