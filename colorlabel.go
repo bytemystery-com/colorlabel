@@ -77,11 +77,14 @@ type ColorLabel struct {
 	textStyle *fyne.TextStyle
 	truncate  TruncateModeType
 
-	OnTapped          func()
-	OnTappedSecondary func()
-	OnDoubleTapped    func()
-	lastKeyModifier   fyne.KeyModifier
-	alignment         fyne.TextAlign
+	OnTapped            func()
+	OnTappedEx          func(*fyne.PointEvent)
+	OnTappedSecondary   func()
+	OnTappedSecondaryEx func(*fyne.PointEvent)
+	OnDoubleTapped      func()
+	OnDoubleTappedEx    func(*fyne.PointEvent)
+	lastKeyModifier     fyne.KeyModifier
+	alignment           fyne.TextAlign
 }
 
 func getColor(c any) color.Color {
@@ -243,12 +246,18 @@ func (l *ColorLabel) Tapped(ev *fyne.PointEvent) {
 	if l.OnTapped != nil {
 		l.OnTapped()
 	}
+	if l.OnTappedEx != nil {
+		l.OnTappedEx(ev)
+	}
 }
 
 // SecondaryTappable interface
-func (l *ColorLabel) TappedSecondary(*fyne.PointEvent) {
+func (l *ColorLabel) TappedSecondary(ev *fyne.PointEvent) {
 	if l.OnTappedSecondary != nil {
 		l.OnTappedSecondary()
+	}
+	if l.OnTappedSecondaryEx != nil {
+		l.OnTappedSecondaryEx(ev)
 	}
 }
 
@@ -256,6 +265,9 @@ func (l *ColorLabel) TappedSecondary(*fyne.PointEvent) {
 func (l *ColorLabel) DoubleTapped(ev *fyne.PointEvent) {
 	if l.OnDoubleTapped != nil {
 		l.OnDoubleTapped()
+	}
+	if l.OnDoubleTappedEx != nil {
+		l.OnDoubleTappedEx(ev)
 	}
 }
 

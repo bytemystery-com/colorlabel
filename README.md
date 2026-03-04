@@ -137,7 +137,7 @@ import "github.com/bytemystery-com/colorlabel"
   - [func \(l \*ColorLabel\) SetTruncate\(tr bool\)](<#ColorLabel.SetTruncate>)
   - [func \(l \*ColorLabel\) SetTruncateMode\(tr TruncateModeType\)](<#ColorLabel.SetTruncateMode>)
   - [func \(l \*ColorLabel\) Tapped\(ev \*fyne.PointEvent\)](<#ColorLabel.Tapped>)
-  - [func \(l \*ColorLabel\) TappedSecondary\(\*fyne.PointEvent\)](<#ColorLabel.TappedSecondary>)
+  - [func \(l \*ColorLabel\) TappedSecondary\(ev \*fyne.PointEvent\)](<#ColorLabel.TappedSecondary>)
 - [type ColorLabelRenderer](<#ColorLabelRenderer>)
   - [func \(r \*ColorLabelRenderer\) Destroy\(\)](<#ColorLabelRenderer.Destroy>)
   - [func \(r \*ColorLabelRenderer\) Layout\(size fyne.Size\)](<#ColorLabelRenderer.Layout>)
@@ -156,9 +156,12 @@ import "github.com/bytemystery-com/colorlabel"
 type ColorLabel struct {
     widget.BaseWidget
 
-    OnTapped          func()
-    OnTappedSecondary func()
-    OnDoubleTapped    func()
+    OnTapped            func()
+    OnTappedEx          func(*fyne.PointEvent)
+    OnTappedSecondary   func()
+    OnTappedSecondaryEx func(*fyne.PointEvent)
+    OnDoubleTapped      func()
+    OnDoubleTappedEx    func(*fyne.PointEvent)
     // contains filtered or unexported fields
 }
 ```
@@ -329,7 +332,7 @@ Tappable interface
 ### func \(\*ColorLabel\) TappedSecondary
 
 ```go
-func (l *ColorLabel) TappedSecondary(*fyne.PointEvent)
+func (l *ColorLabel) TappedSecondary(ev *fyne.PointEvent)
 ```
 
 SecondaryTappable interface
